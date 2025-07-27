@@ -1,0 +1,8 @@
+server:
+  port: 8555
+  servlet:
+    context-path: /decorator
+
+spring:
+  application:
+    name: DecoratorPattern
