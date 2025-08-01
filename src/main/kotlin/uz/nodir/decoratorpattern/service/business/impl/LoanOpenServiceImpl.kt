@@ -5,11 +5,8 @@ import org.springframework.stereotype.Service
 import uz.nodir.decoratorpattern.model.dto.core.response.ResultData
 import uz.nodir.decoratorpattern.model.dto.loan.request.LoanOpenRequestDTO
 import uz.nodir.decoratorpattern.model.dto.loan.response.LoanOpenResponseDTO
+import uz.nodir.decoratorpattern.service.builder.ProcessBuilder
 import uz.nodir.decoratorpattern.service.business.LoanOpenService
-import uz.nodir.decoratorpattern.service.pattern.impl.BaseLoanProcessor
-import uz.nodir.decoratorpattern.service.pattern.impl.ClientHistoryProcessor
-import uz.nodir.decoratorpattern.service.pattern.impl.FraudControlProcessor
-import uz.nodir.decoratorpattern.service.pattern.impl.SalaryProcessor
 
 
 /**
@@ -28,14 +25,11 @@ class LoanOpenServiceImpl : LoanOpenService {
     override fun open(requestDTO: LoanOpenRequestDTO): ResultData<LoanOpenResponseDTO> {
         log.info("Received command to open loan with request dto: $requestDTO")
 
-        val loanProcessor =
-            SalaryProcessor(
-                ClientHistoryProcessor(
-                    FraudControlProcessor(
-                        BaseLoanProcessor()
-                    )
-                )
-            )
+        val loanProcessor = ProcessBuilder()
+            .fraudControl()
+            .salaryScoring()
+            .historyChecker()
+            .build()
 
         val responseDTO = loanProcessor.process(requestDTO)
 
