@@ -1,8 +1,8 @@
 package uz.nodir.decoratorpattern.model.dto.loan.request
 
-import com.fasterxml.jackson.annotation.JsonSubTypes
-import com.fasterxml.jackson.annotation.JsonTypeInfo
+import com.fasterxml.jackson.annotation.JsonProperty
 import jakarta.validation.constraints.Min
+import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.NotNull
 import uz.nodir.decoratorpattern.model.enums.LoanType
 
@@ -14,23 +14,23 @@ import uz.nodir.decoratorpattern.model.enums.LoanType
 
  **/
 
-@JsonTypeInfo(
-    use = JsonTypeInfo.Id.NAME,
-    include = JsonTypeInfo.As.PROPERTY,
-    property = "version",
-    visible = true
-)
-@JsonSubTypes(
-    value = [
-        JsonSubTypes.Type(value = LoanOpenV1Request::class, name = "v1"),
-        JsonSubTypes.Type(value = LoanOpenV2Request::class, name = "v2")
-    ]
-)
-interface LoanOpenRequestDTO {
+data class LoanOpenRequestDTO(
 
-    @get:NotNull(message = "Type is required")
-    val type: LoanType
+    @JsonProperty("type")
+    @field:NotNull(message = "Type is required")
+    val type: LoanType,
 
-    @get:Min(value = 1, message = "Amount must be greater than 0")
-    val amount: Long
-}
+    @JsonProperty("amount")
+    @field:Min(value = 1, message = "Amount must be greater than 1")
+    val amount: Long = 0L,
+
+    @JsonProperty("description")
+    @field:NotBlank(message = "Description is required")
+    val description: String? = null,
+
+    /**
+     * Every month pay date
+     */
+    @JsonProperty("repayDate")
+    val repayDate: Int? = 5
+)

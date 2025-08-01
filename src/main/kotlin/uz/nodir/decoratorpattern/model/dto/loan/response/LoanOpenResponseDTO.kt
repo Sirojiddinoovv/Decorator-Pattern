@@ -1,5 +1,6 @@
 package uz.nodir.decoratorpattern.model.dto.loan.response
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import uz.nodir.decoratorpattern.model.enums.LoanType
 
 
@@ -9,11 +10,13 @@ import uz.nodir.decoratorpattern.model.enums.LoanType
 @group: Meloman
 
  **/
-interface LoanOpenResponseDTO {
 
-    val type: LoanType
-
-    val id: String
-
-    val percent: Double
-}
+@JsonInclude(JsonInclude.Include.NON_NULL)
+data class LoanOpenResponseDTO(
+    val type: LoanType,
+    val id: String,
+    val percent: Double,
+    val period: Int,
+    val gracePeriod: Int,
+    val nearestAmount: Long
+)
