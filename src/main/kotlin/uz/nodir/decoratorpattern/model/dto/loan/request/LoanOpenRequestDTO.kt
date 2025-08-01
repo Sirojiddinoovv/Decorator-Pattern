@@ -32,5 +32,9 @@ data class LoanOpenRequestDTO(
      * Every month pay date
      */
     @JsonProperty("repayDate")
-    val repayDate: Int? = 5
+    val repayDate: Int? = 5,
+
+    @JsonProperty("clientId")
+    @field:NotBlank(message = "Client id is required")
+    val clientId: String
 )
